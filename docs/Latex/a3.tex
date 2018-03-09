@@ -1,0 +1,98 @@
+% !TEX encoding = UTF-8
+%Koma article
+\documentclass[fontsize=12pt,paper=letter,twoside]{scrartcl}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{makecell}
+
+%Standard Pre-amble
+\input{sty/defns.tex}
+%Useful definitions
+%\newcommand{\mv}[1]{\textit{m\_#1}}
+%\newcommand{\cv}[1]{\textit{c\_#1}}
+%\newcommand{\degree}[1]{^{\circ}\mathrm{#1}}
+%\newcommand{\comment}[1]{{\footnotesize \quad\texttt{--}\textrm{#1}}}
+
+
+%For Code Stylings
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Java,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+% Set the header
+\ihead[]{\small EECS4313 Assignment-3}
+
+
+%%%%%%%%%%%%Enter your names here%%%%%%%%
+\author{Student Name | Student Number | EECS Account
+\and \textbf{Edward Vaisman | 212849857 | eddyv}
+\and \textbf{Robin Bandzar | 212200531 | cse23028}
+\and \textbf{Kirusanth Thiruchelvam | 212918298 | kirusant}
+\and \textbf{Sadman Sakib Hasan | 212497509 | cse23152}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\date{\today} % Display a given date or no date
+
+\begin{document}
+\title{EECS 4313 Assignment 3 \\Data Flow Testing, Slice-Based Testing and Mutation Testing}
+\maketitle
+
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\tableofcontents
+
+
+\newpage
+
+
+\section{BORG Calendar}
+
+\begin{itemize}
+\item The data flow analysis you performed and the calculation of the coverage metrics. You must
+show which test cases are responsible for which dc-paths.
+\item A description of the test cases you added to improve coverage. If your coverage was already high,
+discuss how your testing was able to achieve this.
+\item The slices that you identified and the percentage of slices that your testing covers. You must
+show which test cases are responsible for which slices.
+\item A description of the test cases you added to improve slice coverage. If your coverage was
+already high, discuss how your testing was able to achieve this.
+\item Evaluate the effectiveness of your test cases using mutation testing. Discuss and address any
+issues if you have found in your written report.
+\item Attaching bug reports if bugs are discovered using your testing methods. You should use the
+same bug report format as in Assignment 1. Do not file these bug reports to the project’s bug
+report system.
+\item An appendix with the specification of the methods you are testing
+\end{itemize}
+
+\section{JPetStore}
+
+\begin{itemize}
+\item The test scenarios that you have created;
+\item The request rates and the duration of the load tests;
+\item The analysis of your load tests and the description of any problems that you have found (if there
+are any).
+\end{itemize}
+
+\end{document}
