@@ -69,6 +69,216 @@
 
 \section{BORG Calendar}
 
+\subsection{Data Flow Testing}
+
+\subsubsection{Chosen Method}
+
+\begin{itemize}
+\item \textbf{Class}: \emph{net.sf.borg.common.DateUtil.java}
+\item \textbf{Method}: \emph{minuteString(int mins)}
+\item \textbf{Method Description}:
+This method generate a human reable string for a particular number of minutes. It returns the string in terms of hours or minutes or both hours and mintues.
+\begin{itemize}
+\item \textbf{mins} - The first argument is of type integer.
+\end{itemize}
+\end{itemize}
+
+\noindent Following is the code snippet of the \emph{minuteString} method:
+\begin{code}
+	public static String minuteString(int mins) {
+		
+		int hours = mins / 60;
+		int minsPast = mins % 60;
+		
+		String minutesString;
+		String hoursString;
+		
+		if (hours > 1) {
+			hoursString = hours + " " + Resource.getResourceString("Hours");
+		} else if (hours > 0) {
+			hoursString = hours + " " + Resource.getResourceString("Hour");
+		} else {
+			hoursString = "";
+		}
+
+		if (minsPast > 1) {
+			minutesString = minsPast + " " + Resource.getResourceString("Minutes");
+		} else if (minsPast > 0) {
+			minutesString = minsPast + " " + Resource.getResourceString("Minute");
+		} else if (hours >= 1) {
+			minutesString = "";
+		} else {
+			minutesString = minsPast + " " + Resource.getResourceString("Minutes");
+		}
+
+		// space between hours and minutes
+		if (!hoursString.equals("") && !minutesString.equals(""))
+			minutesString = " " + minutesString;
+
+		return hoursString + minutesString;
+	}
+\end{code}
+
+\subsubsection{Variable set}
+
+Following are the list of variables used in the \emph{minuteString} method along with their types:
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|c | c | c |}
+	\cline{1-3}
+	\textbf{Variable Name} & \textbf{Data Type} & \textbf{Is Primitive?}\\ \hline
+	mins & int & Yes \\ \hline
+	hours & int & Yes \\ \hline
+	minsPast & int & Yes \\ \hline
+	minutesString & String & No \\ \hline
+	hoursString & String & No \\ \hline
+\end{tabular}
+\caption {List of variables for the minuteString method}
+\label{tbl:list_variables}
+\end{table}
+
+\noindent \textbf{Note}: The last two variables, \emph{minutesString} and \emph{hoursString}, are \textbf{NOT} primitive types, and will \textbf{NOT} be used to perform the data flow analysis as specified by the instructor.
+
+\subsubsection{Program Segmentation}
+
+The following table \ref{tbl:program_segmentation} contains the \emph{minuteString} method broken down into segments:
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|c | c |}
+	\cline{1-2}
+	public static string minuteString(int mins) & A \\ \hline
+	int hours = mins / 60; & \\ 
+	int minsPast = mins \% 60; & B \\ \hline
+	String minutesString; & \\ 
+	String hoursString; & C \\ \hline
+	if (hours $>$ 1) \{ & D \\ \hline
+	hoursString = hours + " " + Resource.getResourceString("Hours"); & E \\ \hline
+	\} else if (hours $>$ 0) \{ & F \\ \hline
+	hoursString = hours + " " + Resource.getResourceString("Hour"); & G \\ \hline
+	\} else \{ hoursString = ""; \} & H \\ \hline
+	if (minsPast $>$ 1) \{ & I \\ \hline
+	minutesString = minsPast + " " + Resource.getResourceString("Minutes"); & J \\ \hline
+	\} else if (minsPast $>$ 0) \{ & K \\ \hline
+	minutesString = minsPast + " " + Resource.getResourceString("Minute"); & L \\ \hline
+	\} else if (hours $>=$ 1) \{ & M \\ \hline
+	minutesString = ""; & N \\ \hline
+	\} else \{ & \\ 
+	minutesString = minsPast + " " + Resource.getResourceString("Minutes"); & O \\
+	\} & \\ \hline
+	if (!hoursString.equals("") \&\& !minutesString.equals("")) & P \\ \hline
+	minutesString = " " + minutesString; & Q \\ \hline
+	return hoursString + minutesString; & R \\ \hline
+\end{tabular}
+\caption {Program Segmentation for the minuteString method}
+\label{tbl:program_segmentation}
+\end{table}
+
+\newpage
+\subsubsection{Program graph}
+The following diagram \ref{fig:cfg} represents the control flow graph for the \emph{minuteString} method:
+
+\begin{figure}[!htb]
+\begin{center}
+\includegraphics[width=.99\textwidth]{images/dft/cfg.pdf}
+\end{center}
+\caption{Control Flow Graph for the minuteString method}
+\label{fig:cfg}
+\end{figure}
+
+\clearpage
+\newpage
+\subsubsection{Data Flow Analysis}
+
+\begin{enumerate}
+\item \textbf{du-paths for \emph{mins}}
+\begin{itemize}
+\item \textbf{All-Defs}: \emph{AB}
+\item \textbf{All-C-Uses/Some-P-Uses}: \emph{AB}
+\item \textbf{All-P-Uses/Some-C-Uses}: \emph{AB}
+\item \textbf{All-Uses}: \emph{AB}
+\end{itemize}
+
+\item \textbf{du-paths for \emph{hours}}
+\begin{itemize}
+\item \textbf{All-Defs}: \emph{BCD}
+\item \textbf{All-C-Uses/Some-P-Uses}: \emph{BCDE, BCDFG}
+\item \textbf{All-P-Uses/Some-C-Uses}: \emph{BCD, BCDF, BCDEIKM, BCDFGIKM, BCDFHIKM}
+\item \textbf{All-Uses}: \emph{BCD, BCDE, BCDF, BCDEIKM, BCDFG, BCDFGIKM, BCDFHIKM}
+\end{itemize}
+
+\item \textbf{du-paths for \emph{minsPast}}
+\begin{itemize}
+\item \textbf{All-Defs}: \emph{BCDEI}
+\item \textbf{All-C-Uses/Some-P-Uses}: \emph{BCDEIJ, BCDFGIJ, BCDFHIJ, BCDEIKL, BCDFGIKL, BCDFHIKL, BCDEIKMO, BCDFGIKMO, BCDFHIKMO}
+\item \textbf{All-P-Uses/Some-C-Uses}: \emph{BCDEI, BCDFGI, BCDFHI, BCDEIK, BCDFGIK, BCDFHIK}
+\item \textbf{All-Uses}: \emph{BCDEI, BCDEIJ, BCDFGIJ, BCDFHIJ, BCDEIKL, BCDFGIKL, BCDFHIKL, BCDEIKMO, BCDFGIKMO, BCDFHIKMO, BCDFGI, BCDFHI, BCDEIK, BCDFGIK, BCDFHIK}
+\end{itemize}
+
+\end{enumerate}
+
+
+\subsubsection{Coverage Metrics}
+
+Following are the existing test cases from Assignment-2 and their coverage metrics using the data flow analysis for the \emph{minuteString} method:
+
+\begin{enumerate}
+
+\item \textbf{Test Case 1}:
+\begin{itemize}
+\item \textbf{Input}: mins = 60
+\item \textbf{Path}: \emph{ABCDEGIKMNPR}
+\item \textbf{Coverage}: 100*(12/18) = 66.67\%
+\end{itemize}
+
+\item \textbf{Test Case 2}:
+\begin{itemize}
+\item \textbf{Input}: mins = 61
+\item \textbf{Path}: \emph{ABCDFGIKLPQR}
+\item \textbf{Coverage}: 100*(14/18) = 77.78\%
+\end{itemize}
+
+\item \textbf{Test Case 3}:
+\begin{itemize}
+\item \textbf{Input}: mins = 75
+\item \textbf{Path}: \emph{ABCDFGIJPQR}
+\item \textbf{Coverage}: 100*(15/18) = 83.33\%
+\end{itemize}
+
+\item \textbf{Test Case 4}:
+\begin{itemize}
+\item \textbf{Input}: mins = 180
+\item \textbf{Path}: \emph{ABCDEIKMNPR}
+\item \textbf{Coverage}: 100*(16/18) = 88.88\%
+\end{itemize}
+
+\item \textbf{Test Case 5}:
+\begin{itemize}
+\item \textbf{Input}: mins = 121
+\item \textbf{Path}: \emph{ABCDEIKLPQR}
+\item \textbf{Coverage}: 100*(16/18) = 88.88\%
+\end{itemize}
+
+\item \textbf{Test Case 6}:
+\begin{itemize}
+\item \textbf{Input}: mins = 145
+\item \textbf{Path}: \emph{ABCDEIJPQR}
+\item \textbf{Coverage}: 100*(16/18) = 88.88\%
+\end{itemize}
+
+\item \textbf{Test Case 7}:
+\begin{itemize}
+\item \textbf{Input}: mins = 0
+\item \textbf{Path}: \emph{ABCDFHIOPR}
+\item \textbf{Coverage}: 100*(18/18) = 100.0\%
+\end{itemize}
+
+\end{enumerate}
+
+\noindent \textbf{Rationale}: The testing technique used for testing this method is \emph{Equivalence Class Testing}. It is a suitable technique for this method since the argument is an integer which is an independent variable and the input range can be partitioned assuring disjointness and non-redundancy between each partition set. We have chosen the partition integer range based on usages of minute, minutes, hour, and hours. In order to partition the integer argument into hours and minutes, we divide the minutes by 60 to get the range of hours and the remainder (minutes \% 60) to get the range of the minutes. By covering all the cases, where the given input returns a concatenation of hours and minutes string, we were able to reach a 100\% coverage for this method.
+
+\newpage
 \begin{itemize}
 \item The data flow analysis you performed and the calculation of the coverage metrics. You must
 show which test cases are responsible for which dc-paths.
