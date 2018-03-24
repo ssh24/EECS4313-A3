@@ -69,6 +69,69 @@
 
 \section{BORG Calendar}
 
+\subsection{Mutation Testing}
+Mutation tests were run using the previous unit test suite that we created for assignment 2. The program used to run the Mutation tests was \emph{Eclispe} with the \emph{Pitclipse} plugin. The three methods that we tested are listed with their results in the following subsections. 
+
+\subsubsection{minuteString}
+
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=.99\textwidth]{images/MutationTesting/minuteStringCode.png}
+\end{center}
+\caption{Code for the minuteString method}
+\label{fig:minuteStringCode}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=.99\textwidth]{images/MutationTesting/minuteStringMutant.png}
+\end{center}
+\caption{Mutations for the minuteString method}
+\label{fig:minuteStringMutant}
+\end{figure}
+
+As one can see in Figures \ref{fig:minuteStringCode} and \ref{fig:minuteStringMutant} that the previous tests effectively kill all the mutants so no further changes are needed.
+
+\subsubsection{isAfter}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=.99\textwidth]{images/MutationTesting/isAfterCode.png}
+\end{center}
+\caption{Code for the isAfter method}
+\label{fig:isAfterCode}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=.99\textwidth]{images/MutationTesting/isAfterMutant.png}
+\end{center}
+\caption{Mutations for the isAfter method on OSX}
+\label{fig:isAfterMutant}
+\end{figure}
+\setlength\intextsep{0pt}
+The two Figures above show that the previous tests have mutants which survived.
+
+
+\subsubsection{sendMsg}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=.99\textwidth]{images/MutationTesting/sendMsgCode.png}
+\end{center}
+\caption{Code for the sendMsg method}
+\label{fig:sendMsgCode}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=.99\textwidth]{images/MutationTesting/sendMsgMutant.png}
+\end{center}
+\caption{Mutations for the sendMsg method on OSX}
+\label{fig:sendMsgMutant}
+\end{figure}
+
+The results show that not all mutants have been killed.
+
 \begin{itemize}
 \item The data flow analysis you performed and the calculation of the coverage metrics. You must
 show which test cases are responsible for which dc-paths.

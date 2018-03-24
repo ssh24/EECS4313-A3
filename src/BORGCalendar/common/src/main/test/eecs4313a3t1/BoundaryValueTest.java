@@ -1,6 +1,8 @@
 package eecs4313a3t1;
 
 import static org.junit.Assert.*;
+
+import org.junit.Ignore;
 import org.junit.Test;
 import net.sf.borg.common.*;
 import java.io.IOException;
@@ -85,7 +87,7 @@ public class BoundaryValueTest implements SocketHandler {
 		}
 	}
 
-	@Test
+	@Ignore
 	public void test_sendMsg_WeakRobust() {
 		/** Method used: Boundary Value Testing **/
 		String validHost = "localhost";
