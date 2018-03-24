@@ -106,7 +106,7 @@ As one can see in Figures \ref{fig:minuteStringCode} and \ref{fig:minuteStringMu
 \begin{center}
 \includegraphics[width=.99\textwidth]{images/MutationTesting/isAfterMutant.png}
 \end{center}
-\caption{Mutations for the isAfter method on OSX}
+\caption{Mutations for the isAfter method}
 \label{fig:isAfterMutant}
 \end{figure}
 \setlength\intextsep{0pt}
@@ -126,11 +126,50 @@ The two Figures above show that the previous tests have mutants which survived.
 \begin{center}
 \includegraphics[width=.99\textwidth]{images/MutationTesting/sendMsgMutant.png}
 \end{center}
-\caption{Mutations for the sendMsg method on OSX}
+\caption{Mutations for the sendMsg method}
 \label{fig:sendMsgMutant}
 \end{figure}
+The results show that not all mutants have been killed. From Figure \ref{fig:sendMsgCode} we can see that our mutation testing results can be possibly improved if more tests on the server and socket state are created. 
 
-The results show that not all mutants have been killed.
+
+\fontsize{14}{5}\textbf{After Additional Test Cases}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=.99\textwidth]{images/MutationTesting/sendMsgCodeAfter.png}
+\end{center}
+\caption{Updated code results for the sendMsg method}
+\label{fig:sendMsgCodeAfter}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=.99\textwidth]{images/MutationTesting/sendMsgMutantAfter.png}
+\end{center}
+\caption{Updated mutations for the sendMsg method}
+\label{fig:sendMsgMutantAfter}
+\end{figure}
+
+The testcase shown below was added and improved results to what is shown in Figures \ref{fig:sendMsgCodeAfter} and \ref{fig:sendMsgMutantAfter}. This testcase kills the mutant at lines 44, 48 without increasing line coverage. Thus, showing how testcases built for coverage alone are not sufficient. \\
+
+The remaining bugs all relate to the \emph{close} function of the Socket object instantiated in the \emph{sendMsg} method. When Pitclipse mutates the \emph{close} function and removes it, this action causes a timeout. Which is why the \emph{sendMsg} method is defensively programmed to ensure that the socket connection is closed after the message is sent. Due to the amount of defensive programming and case of timeouts it is not possible to achieve full mutation testing coverage for this method consistently between all machines.
+
+\begin{lstlisting}[caption={Additional test case for sendMsg},label={list:sendMsg}]
+    @Test
+    public void checkServerAlive() {
+    String msg = null;
+    SocketServer ss;
+    String response;
+        try {
+            ss = new SocketServer(2922, this);
+            response = SocketClient.sendMsg("localhost", 2922, msg);
+            assertTrue(ss.isAlive());
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+\end{lstlisting}
 
 \begin{itemize}
 \item The data flow analysis you performed and the calculation of the coverage metrics. You must

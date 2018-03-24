@@ -6,6 +6,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import net.sf.borg.common.*;
 import java.io.IOException;
+import java.net.Socket;
 
 public class BoundaryValueTest implements SocketHandler {
 
@@ -218,4 +219,23 @@ public class BoundaryValueTest implements SocketHandler {
             e.printStackTrace();
         }
     }
+    
+	/**
+	 * ADDITIONAL TESTCASES FOR MUTATION COVERAGE
+	 */
+    @Test
+    public void checkServerAlive() {
+    String msg = null;
+    SocketServer ss;
+    String response;
+        try {
+            ss = new SocketServer(2922, this);
+            response = SocketClient.sendMsg("localhost", 2922, msg);
+            assertTrue(ss.isAlive());
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
 }
