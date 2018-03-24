@@ -148,7 +148,7 @@ The following table \ref{tbl:program_segmentation} contains the \emph{minuteStri
 \centering
 \begin{tabular}{|c | c |}
 	\cline{1-2}
-	public static string minuteString(int mins) & A \\ \hline
+	public static string minuteString(int mins) \{ & A \\ \hline
 	int hours = mins / 60; & \\ 
 	int minsPast = mins \% 60; & B \\ \hline
 	String minutesString; & \\ 
@@ -181,7 +181,7 @@ The following diagram \ref{fig:cfg} represents the control flow graph for the \e
 
 \begin{figure}[!htb]
 \begin{center}
-\includegraphics[width=.99\textwidth]{images/dft/cfg.pdf}
+\includegraphics[width=.99\textwidth]{images/dft/cfg_drawio.pdf}
 \end{center}
 \caption{Control Flow Graph for the minuteString method}
 \label{fig:cfg}
