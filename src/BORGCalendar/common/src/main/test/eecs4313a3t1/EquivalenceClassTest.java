@@ -34,8 +34,8 @@ public class EquivalenceClassTest {
 		// ----------------------------------------------------------------------------------------------------------------
 		//based off the implmentation of negative inputs in the method [ Invalid inputs]
 		//Class 10: Mins/60 < 0 and Mins%60 = 1 - Testing negative hours with negative minutes [Range:[(0,negative infinity)hour and [-1] minutes]
-		//assertEquals("1 Minute",DateUtil.minuteString(-61)); // (-61) mod 60 = 1 but the output is -1 
+		assertEquals("1 Minute",DateUtil.minuteString(-61)); // (-61) mod 60 = 1 but the output is -1 
 		//Class 11 : Mins/60 < 0 and Mins%60 > 1 - Teseing -1 minute [Range:[(0,negative infinity)hour and [-1] minute]
-		//assertEquals("10 Minutes",DateUtil.minuteString(-70)); // (-71) mod 60 = 10 but the output is -10	
+		assertEquals("10 Minutes",DateUtil.minuteString(-70)); // (-71) mod 60 = 10 but the output is -10	
 	}
 }
