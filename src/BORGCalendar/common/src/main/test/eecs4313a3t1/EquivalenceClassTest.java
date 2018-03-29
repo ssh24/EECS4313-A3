@@ -10,7 +10,7 @@ public class EquivalenceClassTest {
 	public void testMinuteString() {
 		//Hour
 		//Class 1: Mins/60 = 1 and Mins%60 = 0 - Testing 1 hour [Range: [1]]
-		assertEquals("1 Hour",DateUtil.minuteString(60));
+		assertEquals("1 Hour", DateUtil.minuteString(60));
 		//Class 2: Mins/60 = 1 and Mins%60 = 1 -Testing 1 hour with 1 minute [Range:[1] hour and [1] minute]
 		assertEquals("1 Hour 1 Minute",DateUtil.minuteString(61));
 		//Class 3: Mins/60 = 1 and Mins%60 > 1 -Testing 1 hour with some minutes [Range:[1] hour and (1,59] minutes]
