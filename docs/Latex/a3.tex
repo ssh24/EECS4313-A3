@@ -93,7 +93,7 @@ report system.
 After exploring the JPetStore system, we came up with some realistic non-trivial test scenarios that can be carried out for load testing using JMeter. The following subsections cover each scenarios, description on how it was load tested and the result analysis of the load test.
 
 \bigskip
-\noindent Following is the system specification for which the load test was conducted under:
+\noindent Following are the system specifications for which the load test was conducted under:
 \begin{itemize}
 \item \textbf{Operating System}: Windows 10 Pro 64-bit (10.0, Build 16299)
 \item \textbf{Language}: English (Regional Setting: English)
@@ -105,8 +105,8 @@ After exploring the JPetStore system, we came up with some realistic non-trivial
 \item \textbf{Java Version}: 1.8.0\_151-b12
 \end{itemize}
 
-
-\subsection{Scenario 1}
+\newpage
+\subsection{Scenario 1: Returning User}
 
 \subsubsection{Overview}
 The first test scenario is for an existing user in the system. The testing scenario will consist of a returning user logging in, selecting one of each of the 5 possible items sold in JPetStore, adding the items to the cart, performing a checkout of the cart and finally logging out. The following describes an exact breakdown of the steps the load test will carry out:
@@ -148,7 +148,7 @@ Following are the load test properties applied for testing this scenario:
 \end{itemize}
 
 \subsubsection{Executing Load Test}
-After setting up the load test plan using JMeter, we executed the test. The test run was for approximately 20 minutes completing all 30 iterations. The following diagrams show the result tree of the test run.
+After setting up the load test plan using JMeter, we executed the test. The test run was for approximately 18 minutes completing all 30 iterations. The following diagrams show the result tree of the test run.
 
 \begin{figure}[!htb]
 \begin{center}
@@ -161,7 +161,7 @@ After setting up the load test plan using JMeter, we executed the test. The test
 \subsubsection{Analysing Load Test}
 The following statistics were gathered from the Apache access logs by simple shell-scripting methodology for this test scenario:
 \begin{itemize}
-\item \textbf{Test Duration}: Approximately 20 minutes
+\item \textbf{Test Duration}: Approximately 18 minutes
 \item \textbf{Total Number of Requests}: 4714
 \item \textbf{Number of GET Requests}: 4399 (93\% of all requests)
 \item \textbf{Number of POST Requests}: 315 (7\% of all requests)
@@ -173,7 +173,7 @@ The following statistics were gathered from the Apache access logs by simple she
 \noindent Following is a snapshot of the Apache access log:
 \begin{figure}[!htb]
 \begin{center}
-\includegraphics[width=.7\textwidth]{../../load-test/test-plans/returning-user/access-log.png}
+\includegraphics[width=.8\textwidth]{../../load-test/test-plans/returning-user/access-log.png}
 \end{center}
 \caption{Apache Access Log Snapshot for Returning User Scenario}
 \label{fig:ruser:access_log}
@@ -200,6 +200,124 @@ The following statistics were gathered from the Apache access logs by simple she
 \end{figure}
 
 \smallskip
-\noindent \textbf{Conclusion}: The load test scenario for returning user made about 4714 request and the test ran for approximately 20 minutes. Despite some natural high spikes on the performance monitor and java monitor, the load test was carried out successfully without any crashes or unexpected behaviour in the application.
+\noindent \textbf{Conclusion}: The load test scenario for returning user made about 4714 request and the test ran for approximately 18 minutes. Despite some natural high spikes on the performance monitor and java monitor, the load test was carried out successfully without any crashes or unexpected behaviour in the application.
+
+
+\newpage
+\subsection{Scenario 2: New User}
+
+\subsubsection{Overview}
+The second test scenario is for a new user in the system. The testing scenario will consist of registering a new user, selecting one of each of the 5 possible items sold in JPetStore, adding the items to the cart, performing a checkout of the cart and finally logging out. The following describes an exact breakdown of the steps the load test will carry out:
+
+\begin{itemize}
+\item Access the JPetStore Homepage (\url{http://localhost:8080/jpetstore/}).
+\item Click \emph{Enter the Store}.
+\item Click on the \emph{Sign in} button.
+\item Click \emph{Register now}.
+\item Enter the sign-up credentials and click \emph{Create Account}. The username and password for signing up would be loaded from a CSV file, whereas the other fields will be supplied the value of \emph{abc}.
+\item Go to the \emph{Fish} section, select a fish item, add it to the cart and return to the main menu.
+\item Go to the \emph{Dogs} section, select a dog item, add it to the cart and return to the main menu.
+\item Go to the \emph{Reptiles} section, select a reptile item, add it to the cart and return to the main menu.
+\item Go to the \emph{Cats} section, select a cat item, add it to the cart and return to the main menu.
+\item Go to the \emph{Birds} section, select a bird item, add it to the cart.
+\item Proceed to checkout and follow the steps until the order has been placed.
+\item Return back to the main menu and sign out.
+\end{itemize}
+
+\newpage
+\bigskip
+\noindent The following images depicts the Recording Controller for the test case scenario and the pages our load test will navigate through per each iteration:
+
+\begin{figure}[!htb]
+\begin{center}
+\includegraphics[width=.5\textwidth]{../../load-test/test-plans/new-user/rc.png}
+\end{center}
+\caption{Recording Controller for New User Scenario}
+\label{fig:ruser:rc}
+\end{figure}
+
+\bigskip
+\noindent The following images depicts the snapshot of the CSV file containing usernames and password for registering new users. On the POST request for registering a new user we load the credentials and use them through variable names such as \$\{username\} and \$\{password\}.
+
+\begin{figure}[!htb]
+\begin{center}
+\includegraphics[width=.6\textwidth]{../../load-test/test-plans/new-user/csv.png}
+\end{center}
+\caption{CSV Credential File for New User Scenario}
+\label{fig:ruser:csv}
+\end{figure}
+
+\begin{figure}[!htb]
+\begin{center}
+\includegraphics[width=.7\textwidth]{../../load-test/test-plans/new-user/post-request.png}
+\end{center}
+\caption{HTTP Post Request for New User Scenario}
+\label{fig:ruser:csv}
+\end{figure}
+
+\clearpage
+\subsubsection{Load Test Properties}
+Following are the load test properties applied for testing this scenario:
+\begin{itemize}
+\item \textbf{Number of Thread (users)}: 5
+\item \textbf{Ramp-up Period (in seconds)}: 5
+\item \textbf{Loop Count}: 30
+\item \textbf{Thread Delay (in milliseconds)}: 1000
+\end{itemize}
+
+\subsubsection{Executing Load Test}
+After setting up the load test plan using JMeter, we executed the test. The test run was for approximately 15 minutes completing all 30 iterations. The following diagrams show the result tree of the test run.
+
+\begin{figure}[!htb]
+\begin{center}
+\includegraphics[width=.9\textwidth]{../../load-test/test-plans/new-user/result-tree.png}
+\end{center}
+\caption{View Results Tree for New User Scenario}
+\label{fig:nuser:view_result_tree}
+\end{figure}
+
+\subsubsection{Analysing Load Test}
+The following statistics were gathered from the Apache access logs by simple shell-scripting methodology for this test scenario:
+\begin{itemize}
+\item \textbf{Test Duration}: Approximately 15 minutes
+\item \textbf{Total Number of Requests}: 7500
+\item \textbf{Number of GET Requests}: 7000 (93\% of all requests)
+\item \textbf{Number of POST Requests}: 500 (7\% of all requests)
+\item \textbf{Success HTTP Codes}: 200 (Success) and 302 (Found)
+\item \textbf{Failure HTTP Codes}: None
+\end{itemize}
+
+\bigskip
+\noindent Following is a snapshot of the Apache access log:
+\begin{figure}[!htb]
+\begin{center}
+\includegraphics[width=.8\textwidth]{../../load-test/test-plans/new-user/access-log.png}
+\end{center}
+\caption{Apache Access Log Snapshot for New User Scenario}
+\label{fig:nuser:access_log}
+\end{figure}
+
+\clearpage
+\bigskip
+\noindent Following is a snapshot of the Windows Performance Monitor and Java Monitor Console during the load test execution:
+
+\begin{figure}[!htb]
+\begin{center}
+\includegraphics[width=.7\textwidth]{../../load-test/test-plans/new-user/perfmon-nu.png}
+\end{center}
+\caption{Windows Performance Monitor Snapshot for New User Scenario}
+\label{fig:nuser:perfmon}
+\end{figure}
+
+\begin{figure}[!htb]
+\begin{center}
+\includegraphics[width=.7\textwidth]{../../load-test/test-plans/new-user/jconsole-nu.png}
+\end{center}
+\caption{JConsole Snapshot for New User Scenario}
+\label{fig:nuser:jconsole}
+\end{figure}
+
+\smallskip
+\noindent \textbf{Conclusion}: The load test scenario for new user made about 7500 request and the test ran for approximately 15 minutes. Despite some natural high spikes on the performance monitor and java monitor, the load test was carried out successfully without any crashes or unexpected behaviour in the application.
 
 \end{document}
