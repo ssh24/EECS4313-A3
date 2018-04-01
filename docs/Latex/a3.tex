@@ -69,6 +69,65 @@
 
 \section{BORG Calendar}
 
+\subsection{Slice Testing}
+
+\subsubsection{Chosen Method for Testing}
+
+\begin{itemize}
+\item \textbf{Class}: \emph{net.sf.borg.common.DateUtil.java}
+\item \textbf{Method}: \emph{minuteString(int mins)}
+\item \textbf{Method Description}:
+This method generate a human reable string for a particular number of minutes. It returns the string in terms of hours or minutes or both hours and mintues.
+\begin{itemize}
+\item \textbf{mins} - The first argument is of type integer.
+\end{itemize}
+\end{itemize}
+
+\noindent Following is the code of the \emph{minuteString} method:
+\begin{code}
+  public static String minuteString(int mins) {
+    
+    int hours = mins / 60;
+    int minsPast = mins % 60;
+    
+    String minutesString;
+    String hoursString;
+    
+    if (hours > 1) {
+      hoursString = hours + " " + Resource.getResourceString("Hours");
+    } else if (hours > 0) {
+      hoursString = hours + " " + Resource.getResourceString("Hour");
+    } else {
+      hoursString = "";
+    }
+
+    if (minsPast > 1) {
+      minutesString = minsPast + " " + Resource.getResourceString("Minutes");
+    } else if (minsPast > 0) {
+      minutesString = minsPast + " " + Resource.getResourceString("Minute");
+    } else if (hours >= 1) {
+      minutesString = "";
+    } else {
+      minutesString = minsPast + " " + Resource.getResourceString("Minutes");
+    }
+
+    // space between hours and minutes
+    if (!hoursString.equals("") && !minutesString.equals(""))
+      minutesString = " " + minutesString;
+
+    return hoursString + minutesString;
+  }
+\end{code}
+
+\subsubsection{Forward Slicing}
+
+
+\subsubsection{Backward Slicing}
+
+
+\subsubsection{Dynamic Slicing}
+
+
 \begin{itemize}
 \item The data flow analysis you performed and the calculation of the coverage metrics. You must
 show which test cases are responsible for which dc-paths.
