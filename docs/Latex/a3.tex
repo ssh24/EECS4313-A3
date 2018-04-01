@@ -103,6 +103,8 @@ After exploring the JPetStore system, we came up with some realistic non-trivial
 \item \textbf{Processor}: AMD A6-5200 APU with Radeon(TM) HD Graphics (4 CPUs), ~2.0GHz
 \item \textbf{Memory}: 6144MB RAM
 \item \textbf{Java Version}: 1.8.0\_151-b12
+\item \textbf{Apache Tomcat Version}: 7.0.85
+\item \textbf{JMeter Version}: 2.11 r1554548
 \end{itemize}
 
 \newpage
@@ -159,7 +161,11 @@ After setting up the load test plan using JMeter, we executed the test. The test
 \end{figure}
 
 \subsubsection{Analysing Load Test}
-The following statistics were gathered from the Apache access logs by simple shell-scripting methodology for this test scenario:
+The following statistics were gathered from the Apache access logs. The access log file was parsed to get the start of the load test and the end of the load test and the total time of the load test execution.
+
+\bigskip
+\noindent Within that timeframe, the total number of requests was found by simply executing: \emph{wc -l ruser\_log.txt}. The total number of GET and POST requests were found by executing \emph{grep -c -w "GET" ruser\_log.txt} and \emph{grep -c -w "POST" ruser\_log.txt} respectively.
+
 \begin{itemize}
 \item \textbf{Test Duration}: Approximately 18 minutes
 \item \textbf{Total Number of Requests}: 4714
@@ -173,7 +179,7 @@ The following statistics were gathered from the Apache access logs by simple she
 \noindent Following is a snapshot of the Apache access log:
 \begin{figure}[!htb]
 \begin{center}
-\includegraphics[width=.8\textwidth]{../../load-test/test-plans/returning-user/access-log.png}
+\includegraphics[width=.6\textwidth]{../../load-test/test-plans/returning-user/access-log.png}
 \end{center}
 \caption{Apache Access Log Snapshot for Returning User Scenario}
 \label{fig:ruser:access_log}
@@ -200,7 +206,7 @@ The following statistics were gathered from the Apache access logs by simple she
 \end{figure}
 
 \smallskip
-\noindent \textbf{Conclusion}: The load test scenario for returning user made about 4714 request and the test ran for approximately 18 minutes. Despite some natural high spikes on the performance monitor and java monitor, the load test was carried out successfully without any crashes or unexpected behaviour in the application.
+\noindent \textbf{Conclusion}: The load test scenario for returning user made about 4714 requests and the test ran for approximately 18 minutes. Despite some natural high spikes on the performance monitor and java monitor, the load test was carried out successfully without any crashes or unexpected behaviour in the application.
 
 
 \newpage
@@ -277,7 +283,11 @@ After setting up the load test plan using JMeter, we executed the test. The test
 \end{figure}
 
 \subsubsection{Analysing Load Test}
-The following statistics were gathered from the Apache access logs by simple shell-scripting methodology for this test scenario:
+The following statistics were gathered from the Apache access logs. The access log file was parsed to get the start of the load test and the end of the load test and the total time of the load test execution.
+
+\bigskip
+\noindent Within that timeframe, the total number of requests was found by simply executing: \emph{wc -l nuser\_log.txt}. The total number of GET and POST requests were found by executing \emph{grep -c -w "GET" nuser\_log.txt} and \emph{grep -c -w "POST" nuser\_log.txt} respectively.
+
 \begin{itemize}
 \item \textbf{Test Duration}: Approximately 15 minutes
 \item \textbf{Total Number of Requests}: 7500
@@ -318,6 +328,6 @@ The following statistics were gathered from the Apache access logs by simple she
 \end{figure}
 
 \smallskip
-\noindent \textbf{Conclusion}: The load test scenario for new user made about 7500 request and the test ran for approximately 15 minutes. Despite some natural high spikes on the performance monitor and java monitor, the load test was carried out successfully without any crashes or unexpected behaviour in the application.
+\noindent \textbf{Conclusion}: The load test scenario for new user made about 7500 requests and the test ran for approximately 15 minutes. Despite some natural high spikes on the performance monitor and java monitor, the load test was carried out successfully without any crashes or unexpected behaviour in the application.
 
 \end{document}
