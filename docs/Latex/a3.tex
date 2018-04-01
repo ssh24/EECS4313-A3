@@ -123,7 +123,27 @@ This method generate a human reable string for a particular number of minutes. I
 
 
 \subsubsection{Backward Slicing}
+Backward slicing is in the form of S(v,n) where the slices are code fragments that contribute to variable v and statement n.\\
 
+S(hours, 102)
+\begin{lstlisting}[numbers=left,firstnumber=100]
+  public static String minuteString(int mins) {
+    
+    int hours = mins / 60;
+\end{lstlisting}  
+
+
+S(minsPast, 103)
+\begin{lstlisting}[numbers=left,firstnumber=100]
+  public static String minuteString(int mins) {
+    
+    
+    int minsPast = mins % 60;
+\end{lstlisting} 
+The following test case covers the two slices listed above.
+\begin{code}
+  assertEquals("1 Hour",DateUtil.minuteString(60));
+\end{code}
 
 \subsubsection{Dynamic Slicing}
 
