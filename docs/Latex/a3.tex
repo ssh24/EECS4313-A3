@@ -68,6 +68,110 @@
 
 
 \section{BORG Calendar}
+\subsection{Slice Testing}
+
+\subsubsection{Chosen Method for Testing}
+
+\begin{itemize}
+\item \textbf{Class}: \emph{net.sf.borg.common.DateUtil.java}
+\item \textbf{Method}: \emph{minuteString(int mins)}
+\item \textbf{Method Description}:
+This method generate a human reable string for a particular number of minutes. It returns the string in terms of hours or minutes or both hours and mintues.
+\begin{itemize}
+\item \textbf{mins} - The first argument is of type integer.
+\end{itemize}
+\end{itemize}
+
+\noindent Following is the code of the \emph{minuteString} method:
+\begin{lstlisting}[numbers=left,firstnumber=100]
+  public static String minuteString(int mins) {
+    
+    int hours = mins / 60;
+    int minsPast = mins % 60;
+    
+    String minutesString;
+    String hoursString;
+    
+    if (hours > 1) {
+      hoursString = hours + " " + Resource.getResourceString("Hours");
+    } else if (hours > 0) {
+      hoursString = hours + " " + Resource.getResourceString("Hour");
+    } else {
+      hoursString = "";
+    }
+
+    if (minsPast > 1) {
+      minutesString = minsPast + " " + Resource.getResourceString("Minutes");
+    } else if (minsPast > 0) {
+      minutesString = minsPast + " " + Resource.getResourceString("Minute");
+    } else if (hours >= 1) {
+      minutesString = "";
+    } else {
+      minutesString = minsPast + " " + Resource.getResourceString("Minutes");
+    }
+
+    // space between hours and minutes
+    if (!hoursString.equals("") && !minutesString.equals(""))
+      minutesString = " " + minutesString;
+
+    return hoursString + minutesString;
+  }
+\end{lstlisting}
+
+\subsubsection{Forward Slicing}
+
+The forward slicing is one of the static program slicing. The forward slicing of a program  can be defined in the form of S(v,n)  which refers to all the program statments that are affected by the value of v at statement n. In other words, what staments will be affected in the program by modifying the selected varible's value at the selected statment. The Borg Calendar has two cases where we can apply the forward slice-based testing.
+\newline
+\\ \textbf {Case 1}: S (hours, 102) -  modifying value of  the variable \emph{hours} at statment 102
+\newline
+\newline
+ In this case, we cannot slice any statment of the program since all of them are depend on variable \emph{hours}. We have two  nested if-else statments and both of them uses variable \emph{hours} in their esle if condition. This makes other conditons on the nested if-else struture to be depend upon the variable of \emph{hour} to execute the program but the value of it would not affect them. Since there is a need for return statment to exeute the code, we cannot slice that statment as well. In order to produce the correct spaces in the outputs we need the if condion made for hourstring and minutes string at statment 127.
+ 
+However, we only need four testcases here to identify how the chage in value of hour affectes the program since other statments in the code do not depend on the vlaue at all and they merely depend on the varible to execute the program successfully due the structure of nested if-else.
+ 
+The following figure show which statments in the method affected by changing value of hours. 
+ \begin{figure}[!htb]
+\begin{center}
+\includegraphics[width=.99\textwidth]{images/forward/hour.png}
+\end{center}
+\caption{Affected lines due to change in the value of  variable \emph{hours}}
+\label{fig:minuteStringCode}
+\end{figure}
+\newline
+\newline
+\newline
+\newline
+In order to check the affected four lines we have implemented threer test cases :
+\begin{enumerate}
+\item assertEquals("3 Hours",DateUtil.minuteString(180))  - checks staments 108- 109 and statments 120 -121
+\item assertEquals("1 Hour",DateUtil.minuteString(60))  - checks statments 110 - 111 and statments 120 -121
+\item assertEquals("0 Minutes",DateUtil.minuteString(0)) - checks statments 110 - 111
+\end{enumerate}
+
+Since the cases provide full coverage of the affected lines, we only need to consider changing those lines to produce the correct result when we modify the vairable \emph{hours}
+\newline
+\newline
+\textbf {Case 2}: S (minsPast, 103) -  modifying value of  the variable \emph{minsPast} at statment 103
+
+ 
+
+
+
+
+ 
+
+ 
+
+ 
+
+
+
+
+
+
+
+
+
 
 \begin{itemize}
 \item The data flow analysis you performed and the calculation of the coverage metrics. You must
