@@ -118,57 +118,177 @@ This method generate a human reable string for a particular number of minutes. I
   }
 \end{lstlisting}
 
-\subsubsection{Forward Slicing}
+\subsubsection{backward Slicing}
 
-The forward slicing is one of the static program slicing. The forward slicing of a program  can be defined in the form of S(v,n)  which refers to all the program statments that are affected by the value of v at statement n. In other words, what staments will be affected in the program by modifying the selected varible's value at the selected statment. The Borg Calendar has two cases where we can apply the forward slice-based testing.
-\newline
-\\ \textbf {Case 1}: S (hours, 102) -  modifying value of  the variable \emph{hours} at statment 102
-\newline
-\newline
- In this case, we cannot slice any statment of the program since all of them are depend on variable \emph{hours}. We have two  nested if-else statments and both of them uses variable \emph{hours} in their esle if condition. This makes other conditons on the nested if-else struture to be depend upon the variable of \emph{hour} to execute the program but the value of it would not affect them. Since there is a need for return statment to exeute the code, we cannot slice that statment as well. In order to produce the correct spaces in the outputs we need the if condion made for hourstring and minutes string at statment 127.
- 
-However, we only need four testcases here to identify how the chage in value of hour affectes the program since other statments in the code do not depend on the vlaue at all and they merely depend on the varible to execute the program successfully due the structure of nested if-else.
- 
-The following figure show which statments in the method affected by changing value of hours. 
- \begin{figure}[!htb]
-\begin{center}
-\includegraphics[width=.99\textwidth]{images/forward/hour.png}
-\end{center}
-\caption{Affected lines due to change in the value of  variable \emph{hours}}
-\label{fig:minuteStringCode}
-\end{figure}
-\newline
-\newline
-\newline
-\newline
-In order to check the affected four lines we have implemented threer test cases :
-\begin{enumerate}
-\item assertEquals("3 Hours",DateUtil.minuteString(180))  - checks staments 108- 109 and statments 120 -121
-\item assertEquals("1 Hour",DateUtil.minuteString(60))  - checks statments 110 - 111 and statments 120 -121
-\item assertEquals("0 Minutes",DateUtil.minuteString(0)) - checks statments 110 - 111
-\end{enumerate}
+The backward slicing is one of the static program slicing. The backward slicing of a program  can be defined in the form of S(v,n)  which refers to statment fragments that contribute to the value of v at statment n. The method we choose for this slice-based testing is \emph{minuterString} from DataUtil class of the Borg Calendar application. The method has two integer primitive types variable called \emph{hours} and \emph{minsPast}. The slices are created based on the references of the statments to these primitive variables.
 
-Since the cases provide full coverage of the affected lines, we only need to consider changing those lines to produce the correct result when we modify the vairable \emph{hours}
-\newline
-\newline
-\textbf {Case 2}: S (minsPast, 103) -  modifying value of  the variable \emph{minsPast} at statment 103
+S(hours, 109)
+\begin{lstlisting}[numbers=left,firstnumber=100]
+  public static String minuteString(int mins) {
+    
+    int hours = mins / 60;
 
- 
+    
+
+    String hoursString;
+    
+    if (hours > 1) {
+      hoursString = hours + " " + Resource.getResourceString("Hours");
+\end{lstlisting}
+
+The slice can be tested by the following test case:
+\begin{code}
+assertEquals("3 Hours",DateUtil.minuteString(180));
+\end{code}
+
+\hfill \break
+\hfill \break
+
+S(hours, 113)
+\begin{lstlisting}[numbers=left,firstnumber=100]
+  public static String minuteString(int mins) {
+    
+    int hours = mins / 60;
+
+    
+
+    String hoursString;
+    
+    if (hours > 1) {
+      hoursString = hours + " " + Resource.getResourceString("Hours");
+    } else if (hours > 0) {
+      hoursString = hours + " " + Resource.getResourceString("Hour");
+\end{lstlisting}
+
+This can be tested by the following test cases:
+\begin{code}
+assertEquals("3 Hours",DateUtil.minuteString(180));
+assertEquals("1 Hour",DateUtil.minuteString(60));
+\end{code}
+
+S(hours, 121)
+\begin{lstlisting}[numbers=left,firstnumber=100]
+  public static String minuteString(int mins) {
+    
+    int hours = mins / 60;
+    int minsPast = mins % 60;
+    
+    String minutesString;
+    String hoursString;
+    
+    if (hours > 1) {
+      hoursString = hours + " " + Resource.getResourceString("Hours");
+    } else if (hours > 0) {
+      hoursString = hours + " " + Resource.getResourceString("Hour");
+    } else {
+      hoursString = "";
+    }
+
+    if (minsPast > 1) {
+      minutesString = minsPast + " " + Resource.getResourceString("Minutes");
+    } else if (minsPast > 0) {
+      minutesString = minsPast + " " + Resource.getResourceString("Minute");
+    } else if (hours >= 1) {
+      minutesString = "";
+\end{lstlisting}
+
+This statment does not contain the referece to \emph{hours} but it is affected by the elseif condtion on \emph{hours} $>=$ 1. Therefore, we have choose this statment for the slice. This contain minsPast variable staments since we need these varaible to reach the \\ ``elseif'' condition on \emph{hours}, so these statments are in the slice due to the nested-if condtion structural constraints. The slice can be tested by following test cases:
+\begin{code}
+assertEquals("3 Hours",DateUtil.minuteString(180));
+assertEquals("1 Hour",DateUtil.minuteString(60));
+\end{code}
+
+S(minsPast, 117)
+\begin{lstlisting}[numbers=left,firstnumber=100]
+  public static String minuteString(int mins) {
+    
+
+    int minsPast = mins % 60;
+    
+    String minutesString;
+
+    
 
 
 
 
- 
-
- 
-
- 
 
 
+    
+
+    if (minsPast > 1) {
+      minutesString = minsPast + " " + Resource.getResourceString("Minutes");
+\end{lstlisting}
+This can be tested by the following test cases:
+\begin{code}
+assertEquals("50 Minutes",DateUtil.minuteString(50));
+\end{code}
+
+S(minsPast, 119)
+\begin{lstlisting}[numbers=left,firstnumber=100]
+  public static String minuteString(int mins) {
+    
+
+    int minsPast = mins % 60;
+    
+    String minutesString;
+
+    
 
 
 
 
+
+
+    
+
+    if (minsPast > 1) {
+      minutesString = minsPast + " " + Resource.getResourceString("Minutes");
+    } else if (minsPast > 0) {
+      minutesString = minsPast + " " + Resource.getResourceString("Minute");
+\end{lstlisting}
+This can be tested by the following test cases:
+\begin{code}
+assertEquals("50 Minutes",DateUtil.minuteString(50));
+assertEquals("1 Minute",DateUtil.minuteString(1));
+\end{code}
+
+S(minsPast, 123)
+\begin{lstlisting}[numbers=left,firstnumber=100]
+  public static String minuteString(int mins) {
+    
+
+    int minsPast = mins % 60;
+    
+    String minutesString;
+
+    
+
+
+
+
+
+
+
+
+    if (minsPast > 1) {
+      minutesString = minsPast + " " + Resource.getResourceString("Minutes");
+    } else if (minsPast > 0) {
+      minutesString = minsPast + " " + Resource.getResourceString("Minute");
+    } else if (hours >= 1) {
+      minutesString = "";
+    } else {
+      minutesString = minsPast + " " + Resource.getResourceString("Minutes");
+\end{lstlisting}
+
+This can be tested by the following test cases:
+\begin{code}
+assertEquals("50 Minutes",DateUtil.minuteString(50));
+assertEquals("1 Minute",DateUtil.minuteString(1));
+assertEquals("0 Minutes",DateUtil.minuteString(0));
+\end{code}
+
+This concludes all the backward slices related to the all the statments reference primitive types that contribute the statment n in the \emph{minuteString} function.
 
 
 
