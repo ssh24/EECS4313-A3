@@ -211,7 +211,7 @@ S(minsPast, 116)
 \end{lstlisting}
 The following test case covers the previous slice for \emph{minsPast}.
 \begin{code}
-assertEquals("2 Hours 1 Minute",DateUtil.minuteString(121));
+assertEquals("1 Hour 15 Minutes",DateUtil.minuteString(75));
 \end{code}
 S(hours, 110)
 \begin{lstlisting}[numbers=left,firstnumber=100]
@@ -280,7 +280,7 @@ S(hours, 112)
 \end{lstlisting}
 The following test case covers the previous slice for \emph{hours}.
 \begin{code}
-assertEquals("0 Minutes",DateUtil.minuteString(0));	
+assertEquals("0 Minutes",DateUtil.minuteString(0)); 
 \end{code}
 
 S(hours, 122)
@@ -339,9 +339,17 @@ S(minsPast, 122)
     
     }
 \end{lstlisting}
-The following test case covers the previous two slices for \emph{hours}.
+The following test cases covers the previous two slices for \emph{hours}.
 \begin{code}
 assertEquals("50 Minutes",DateUtil.minuteString(50));
+assertEquals("1 Hour",DateUtil.minuteString(60));
+assertEquals("1 Hour 1 Minute",DateUtil.minuteString(61));
+assertEquals("1 Hour 15 Minutes",DateUtil.minuteString(75));
+assertEquals("3 Hours",DateUtil.minuteString(180));
+assertEquals("2 Hours 1 Minute",DateUtil.minuteString(121));
+assertEquals("2 Hours 25 Minutes",DateUtil.minuteString(145));
+assertEquals("0 Minutes",DateUtil.minuteString(0));
+assertEquals("1 Minute",DateUtil.minuteString(1));
 \end{code}
 
 This concludes all the backward slices related to the All-defs and P-uses of the primitive types in the \emph{minuteString} function.
