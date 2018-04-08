@@ -63,6 +63,7 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \tableofcontents
+\listoftables
 \listoffigures
 
 \newpage
@@ -70,22 +71,665 @@
 
 \section{BORG Calendar}
 
+\subsection{Data Flow Testing}
+
+\subsubsection{Chosen Method}
+
 \begin{itemize}
-\item The data flow analysis you performed and the calculation of the coverage metrics. You must
-show which test cases are responsible for which dc-paths.
-\item A description of the test cases you added to improve coverage. If your coverage was already high,
-discuss how your testing was able to achieve this.
-\item The slices that you identified and the percentage of slices that your testing covers. You must
-show which test cases are responsible for which slices.
-\item A description of the test cases you added to improve slice coverage. If your coverage was
-already high, discuss how your testing was able to achieve this.
-\item Evaluate the effectiveness of your test cases using mutation testing. Discuss and address any
-issues if you have found in your written report.
-\item Attaching bug reports if bugs are discovered using your testing methods. You should use the
-same bug report format as in Assignment 1. Do not file these bug reports to the project’s bug
-report system.
-\item An appendix with the specification of the methods you are testing
+\item \textbf{Class}: \emph{net.sf.borg.common.DateUtil.java}
+\item \textbf{Method}: \emph{minuteString(int mins)}
+\item \textbf{Method Description}:
+This method generate a human reable string for a particular number of minutes. It returns the string in terms of hours or minutes or both hours and mintues.
+\begin{itemize}
+\item \textbf{mins} - The first argument is of type integer.
 \end{itemize}
+\end{itemize}
+
+\noindent Following is the code snippet of the \emph{minuteString} method:
+\begin{code}
+	public static String minuteString(int mins) {
+		
+		int hours = mins / 60;
+		int minsPast = mins % 60;
+		
+		String minutesString;
+		String hoursString;
+		
+		if (hours > 1) {
+			hoursString = hours + " " + Resource.getResourceString("Hours");
+		} else if (hours > 0) {
+			hoursString = hours + " " + Resource.getResourceString("Hour");
+		} else {
+			hoursString = "";
+		}
+
+		if (minsPast > 1) {
+			minutesString = minsPast + " " + Resource.getResourceString("Minutes");
+		} else if (minsPast > 0) {
+			minutesString = minsPast + " " + Resource.getResourceString("Minute");
+		} else if (hours >= 1) {
+			minutesString = "";
+		} else {
+			minutesString = minsPast + " " + Resource.getResourceString("Minutes");
+		}
+
+		// space between hours and minutes
+		if (!hoursString.equals("") && !minutesString.equals(""))
+			minutesString = " " + minutesString;
+
+		return hoursString + minutesString;
+	}
+\end{code}
+
+\subsubsection{Variable set}
+
+Following are the list of variables used in the \emph{minuteString} method along with their types:
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|c | c | c |}
+	\cline{1-3}
+	\textbf{Variable Name} & \textbf{Data Type} & \textbf{Is Primitive?}\\ \hline
+	mins & int & Yes \\ \hline
+	hours & int & Yes \\ \hline
+	minsPast & int & Yes \\ \hline
+	minutesString & String & No \\ \hline
+	hoursString & String & No \\ \hline
+\end{tabular}
+\caption {List of variables for the minuteString method}
+\label{tbl:list_variables}
+\end{table}
+
+\noindent \textbf{Note}: The last two variables, \emph{minutesString} and \emph{hoursString}, are \textbf{NOT} primitive types, and will \textbf{NOT} be used to perform the data flow analysis as specified by the instructor.
+
+\subsubsection{Program Segmentation}
+
+The following table \ref{tbl:program_segmentation} contains the \emph{minuteString} method broken down into segments:
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|c | c |}
+	\cline{1-2}
+	public static string minuteString(int mins) \{ & A \\ \hline
+	int hours = mins / 60; & \\ 
+	int minsPast = mins \% 60; & B \\ \hline
+	String minutesString; & \\ 
+	String hoursString; & C \\ \hline
+	if (hours $>$ 1) \{ & D \\ \hline
+	hoursString = hours + " " + Resource.getResourceString("Hours"); & E \\ \hline
+	\} else if (hours $>$ 0) \{ & F \\ \hline
+	hoursString = hours + " " + Resource.getResourceString("Hour"); & G \\ \hline
+	\} else \{ hoursString = ""; \} & H \\ \hline
+	if (minsPast $>$ 1) \{ & I \\ \hline
+	minutesString = minsPast + " " + Resource.getResourceString("Minutes"); & J \\ \hline
+	\} else if (minsPast $>$ 0) \{ & K \\ \hline
+	minutesString = minsPast + " " + Resource.getResourceString("Minute"); & L \\ \hline
+	\} else if (hours $>=$ 1) \{ & M \\ \hline
+	minutesString = ""; & N \\ \hline
+	\} else \{ & \\ 
+	minutesString = minsPast + " " + Resource.getResourceString("Minutes"); & O \\
+	\} & \\ \hline
+	if (!hoursString.equals("") \&\& !minutesString.equals("")) & P \\ \hline
+	minutesString = " " + minutesString; & Q \\ \hline
+	return hoursString + minutesString; & R \\ \hline
+\end{tabular}
+\caption {Program Segmentation for the minuteString method}
+\label{tbl:program_segmentation}
+\end{table}
+
+\newpage
+\subsubsection{Program graph}
+The following diagram \ref{fig:cfg} represents the control flow graph for the \emph{minuteString} method:
+
+\begin{figure}[!htb]
+\begin{center}
+\includegraphics[width=.99\textwidth]{images/dft/cfg_drawio.pdf}
+\end{center}
+\caption{Control Flow Graph for the minuteString method}
+\label{fig:cfg}
+\end{figure}
+
+\clearpage
+\newpage
+\subsubsection{Data Flow Analysis}
+
+\begin{enumerate}
+\item \textbf{du-paths for \emph{mins}}
+\begin{itemize}
+\item \textbf{All-Defs}: \emph{AB}
+\item \textbf{All-C-Uses/Some-P-Uses}: \emph{AB}
+\item \textbf{All-P-Uses/Some-C-Uses}: \emph{AB}
+\item \textbf{All-Uses}: \emph{AB}
+\end{itemize}
+
+\item \textbf{du-paths for \emph{hours}}
+\begin{itemize}
+\item \textbf{All-Defs}: \emph{BCD}
+\item \textbf{All-C-Uses/Some-P-Uses}: \emph{BCDE, BCDFG}
+\item \textbf{All-P-Uses/Some-C-Uses}: \emph{BCD, BCDF, BCDEIKM, BCDFGIKM, BCDFHIKM}
+\item \textbf{All-Uses}: \emph{BCD, BCDE, BCDF, BCDEIKM, BCDFG, BCDFGIKM, BCDFHIKM}
+\end{itemize}
+
+\item \textbf{du-paths for \emph{minsPast}}
+\begin{itemize}
+\item \textbf{All-Defs}: \emph{BCDEI}
+\item \textbf{All-C-Uses/Some-P-Uses}: \emph{BCDEIJ, BCDFGIJ, BCDFHIJ, BCDEIKL, BCDFGIKL, BCDFHIKL, BCDEIKMO, BCDFGIKMO, BCDFHIKMO}
+\item \textbf{All-P-Uses/Some-C-Uses}: \emph{BCDEI, BCDFGI, BCDFHI, BCDEIK, BCDFGIK, BCDFHIK}
+\item \textbf{All-Uses}: \emph{BCDEI, BCDEIJ, BCDFGIJ, BCDFHIJ, BCDEIKL, BCDFGIKL, BCDFHIKL, BCDEIKMO, BCDFGIKMO, BCDFHIKMO, BCDFGI, BCDFHI, BCDEIK, BCDFGIK, BCDFHIK}
+\end{itemize}
+
+\end{enumerate}
+
+
+\subsubsection{Coverage Metrics}
+
+Following are the existing test cases from Assignment-2 and their coverage metrics using the data flow analysis for the \emph{minuteString} method:
+
+\begin{enumerate}
+
+\item \textbf{Test Case 1}:
+\begin{itemize}
+\item \textbf{Input}: mins = 60
+\item \textbf{Path}: \emph{ABCDEGIKMNPR}
+\item \textbf{Coverage}: 100*(12/18) = 66.67\%
+\end{itemize}
+
+\item \textbf{Test Case 2}:
+\begin{itemize}
+\item \textbf{Input}: mins = 61
+\item \textbf{Path}: \emph{ABCDFGIKLPQR}
+\item \textbf{Coverage}: 100*(14/18) = 77.78\%
+\end{itemize}
+
+\item \textbf{Test Case 3}:
+\begin{itemize}
+\item \textbf{Input}: mins = 75
+\item \textbf{Path}: \emph{ABCDFGIJPQR}
+\item \textbf{Coverage}: 100*(15/18) = 83.33\%
+\end{itemize}
+
+\item \textbf{Test Case 4}:
+\begin{itemize}
+\item \textbf{Input}: mins = 180
+\item \textbf{Path}: \emph{ABCDEIKMNPR}
+\item \textbf{Coverage}: 100*(16/18) = 88.88\%
+\end{itemize}
+
+\item \textbf{Test Case 5}:
+\begin{itemize}
+\item \textbf{Input}: mins = 121
+\item \textbf{Path}: \emph{ABCDEIKLPQR}
+\item \textbf{Coverage}: 100*(16/18) = 88.88\%
+\end{itemize}
+
+\item \textbf{Test Case 6}:
+\begin{itemize}
+\item \textbf{Input}: mins = 145
+\item \textbf{Path}: \emph{ABCDEIJPQR}
+\item \textbf{Coverage}: 100*(16/18) = 88.88\%
+\end{itemize}
+
+\item \textbf{Test Case 7}:
+\begin{itemize}
+\item \textbf{Input}: mins = 0
+\item \textbf{Path}: \emph{ABCDFHIOPR}
+\item \textbf{Coverage}: 100*(18/18) = 100.0\%
+\end{itemize}
+
+\end{enumerate}
+
+\noindent \textbf{Rationale}: The testing technique used for testing this method is \emph{Equivalence Class Testing}. It is a suitable technique for this method since the argument is an integer which is an independent variable and the input range can be partitioned assuring disjointness and non-redundancy between each partition set. We have chosen the partition integer range based on usages of minute, minutes, hour, and hours. In order to partition the integer argument into hours and minutes, we divide the minutes by 60 to get the range of hours and the remainder (minutes \% 60) to get the range of the minutes. By covering all the cases, where the given input returns a concatenation of hours and minutes string, we were able to reach a 100\% coverage for this method.
+
+\newpage
+\subsection{Slice Testing}
+
+\subsubsection{Chosen Method for Testing}
+
+\begin{itemize}
+\item \textbf{Class}: \emph{net.sf.borg.common.DateUtil.java}
+\item \textbf{Method}: \emph{minuteString(int mins)}
+\item \textbf{Method Description}:
+This method generates a human readable string for a particular number of minutes. It returns the string in terms of hours or minutes or both hours and minutes.
+\begin{itemize}
+\item \textbf{mins} - The first argument is of type integer.
+\end{itemize}
+\end{itemize}
+
+\noindent Following is the code of the \emph{minuteString} method:
+\begin{lstlisting}[numbers=left,firstnumber=100]
+  public static String minuteString(int mins) {
+    
+    int hours = mins / 60;
+    int minsPast = mins % 60;
+    
+    String minutesString;
+    String hoursString;
+    
+    if (hours > 1) {
+      hoursString = hours + " " + Resource.getResourceString("Hours");
+    } else if (hours > 0) {
+      hoursString = hours + " " + Resource.getResourceString("Hour");
+    } else {
+      hoursString = "";
+    }
+
+    if (minsPast > 1) {
+      minutesString = minsPast + " " + Resource.getResourceString("Minutes");
+    } else if (minsPast > 0) {
+      minutesString = minsPast + " " + Resource.getResourceString("Minute");
+    } else if (hours >= 1) {
+      minutesString = "";
+    } else {
+      minutesString = minsPast + " " + Resource.getResourceString("Minutes");
+    }
+
+    // space between hours and minutes
+    if (!hoursString.equals("") && !minutesString.equals(""))
+      minutesString = " " + minutesString;
+
+    return hoursString + minutesString;
+  }
+\end{lstlisting}
+
+\subsubsection{Backward Slicing}
+Backward slicing is in the form of S(v,n) where the slices are code fragments that contribute to variable v at statement n. Slices are only done for primitive values and their All-defs and P-use paths defined in the data flow analysis part.\\
+
+S(hours, 102)
+\begin{lstlisting}[numbers=left,firstnumber=100]
+  public static String minuteString(int mins) {
+    
+    int hours = mins / 60;
+\end{lstlisting}  
+
+
+S(minsPast, 103)
+\begin{lstlisting}[numbers=left,firstnumber=100]
+  public static String minuteString(int mins) {
+    
+    
+    int minsPast = mins % 60;
+\end{lstlisting} 
+The following test case covers the two slices listed above and covers the All-def, P-use for \emph{mins}.
+\begin{code}
+  assertEquals("1 Hour",DateUtil.minuteString(60));
+\end{code}
+
+\break
+S(hours, 108)
+\begin{lstlisting}[numbers=left,firstnumber=100]
+  public static String minuteString(int mins) {
+    
+    int hours = mins / 60;
+    
+    
+
+
+    
+    if (hours > 1) {
+    }
+\end{lstlisting}
+
+
+S(hours, 120)
+\begin{lstlisting}[numbers=left,firstnumber=100]
+  public static String minuteString(int mins) {
+    
+    int hours = mins / 60;
+    int minsPast = mins % 60;
+    
+    
+    
+    
+    
+     
+    
+     
+    
+     
+    
+
+    if (minsPast > 1) {
+      
+    } else if (minsPast > 0) {
+      
+    } else if (hours >= 1) {
+    }
+\end{lstlisting}
+The following test case covers the previous two slices for \emph{hours}.
+\begin{code}
+assertEquals("3 Hours",DateUtil.minuteString(180));
+\end{code}
+S(minsPast, 116)
+\begin{lstlisting}[numbers=left,firstnumber=100]
+  public static String minuteString(int mins) {
+    
+    
+    int minsPast = mins % 60;
+    
+    
+    
+    
+    
+     
+    
+     
+    
+     
+    
+
+    if (minsPast > 1) {
+      
+    }
+\end{lstlisting}
+The following test case covers the previous slice for \emph{minsPast}.
+\begin{code}
+assertEquals("1 Hour 15 Minutes",DateUtil.minuteString(75));
+\end{code}
+S(hours, 110)
+\begin{lstlisting}[numbers=left,firstnumber=100]
+  public static String minuteString(int mins) {
+    
+    int hours = mins / 60;
+    
+    
+    
+    
+    
+    if (hours > 1) {
+      
+    } else if (hours > 0) {
+    
+    }
+\end{lstlisting}
+The following test case covers the previous slice for \emph{hours}.
+\begin{code}
+assertEquals("1 Hour 1 Minute",DateUtil.minuteString(61));
+\end{code}
+
+S(minsPast, 118)
+\begin{lstlisting}[numbers=left,firstnumber=100]
+  public static String minuteString(int mins) {
+    
+    
+    int minsPast = mins % 60;
+    
+    
+    
+    
+    
+     
+    
+     
+    
+     
+    
+
+    if (minsPast > 1) {
+      
+    } else if (minsPast > 0) {
+      
+    
+    }
+\end{lstlisting}
+The following test case covers the previous slice for \emph{minsPast}.
+\begin{code}
+assertEquals("1 Hour 1 Minute",DateUtil.minuteString(61));
+\end{code}
+
+S(hours, 112)
+\begin{lstlisting}[numbers=left,firstnumber=100]
+  public static String minuteString(int mins) {
+    
+    int hours = mins / 60;
+    
+    
+    
+    
+    
+    if (hours > 1) {
+      
+    } else if (hours > 0) {
+    
+    } else {
+    
+    }
+\end{lstlisting}
+The following test case covers the previous slice for \emph{hours}.
+\begin{code}
+assertEquals("0 Minutes",DateUtil.minuteString(0)); 
+\end{code}
+
+S(hours, 122)
+\begin{lstlisting}[numbers=left,firstnumber=100]
+  public static String minuteString(int mins) {
+    
+    int hours = mins / 60;
+    int minsPast = mins % 60;
+    
+    
+    
+    
+    
+     
+    
+     
+    
+     
+    
+
+    if (minsPast > 1) {
+      
+    } else if (minsPast > 0) {
+      
+    } else if (hours >= 1) {
+    
+    } else {
+    
+    }
+\end{lstlisting}
+S(minsPast, 122)
+\begin{lstlisting}[numbers=left,firstnumber=100]
+  public static String minuteString(int mins) {
+    
+    int hours = mins / 60;
+    int minsPast = mins % 60;
+    
+    
+    
+    
+    
+     
+    
+     
+    
+     
+    
+
+    if (minsPast > 1) {
+      
+    } else if (minsPast > 0) {
+      
+    } else if (hours >= 1) {
+    
+    } else {
+    
+    }
+\end{lstlisting}
+The following test cases covers the previous two slices.
+\begin{code}
+assertEquals("0 Minutes",DateUtil.minuteString(0));
+\end{code}
+
+This concludes all the backward slices related to the All-defs and P-uses of the primitive types in the \emph{minuteString} function.
+
+\newpage
+\subsection{Mutation Testing}
+Mutation tests were run using the previous unit test suite that we created for assignment 2. The program used to run the Mutation tests was \emph{Eclipse} with the \emph{Pitclipse} plugin. The three methods that we tested are listed with their results in the following subsections. 
+
+\subsubsection{minuteString Function}
+
+
+\begin{figure}[!htb]
+\begin{center}
+\includegraphics[width=.99\textwidth]{images/MutationTesting/minuteStringCode.png}
+\end{center}
+\caption{Code for the minuteString method}
+\label{fig:minuteStringCode}
+\end{figure}
+
+\clearpage
+\begin{figure}[!htb]
+\begin{center}
+\includegraphics[width=.99\textwidth]{images/MutationTesting/minuteStringMutant.png}
+\end{center}
+\caption{Mutations for the minuteString method}
+\label{fig:minuteStringMutant}
+\end{figure}
+
+As one can see in Figures \ref{fig:minuteStringCode} and \ref{fig:minuteStringMutant} that the previous tests effectively kill all the mutants so no further changes are needed.
+
+
+\subsubsection{isAfter Function}
+\begin{figure}[!htb]
+\begin{center}
+\includegraphics[width=.99\textwidth]{images/MutationTesting/isAfterCode.png}
+\end{center}
+\caption{Code for the isAfter method}
+\label{fig:isAfterCode}
+\end{figure}
+
+\clearpage
+\begin{figure}[!htb]
+\begin{center}
+\includegraphics[width=.99\textwidth]{images/MutationTesting/isAfterMutant.png}
+\end{center}
+\caption{Mutations for the isAfter method}
+\label{fig:isAfterMutant}
+\end{figure}
+
+
+\noindent Looking at the result of the mutation test result from Figure \ref{fig:isAfterMutant}, it is inevitable that the method \emph{isAfter} will still pass tests even after removing the lines 44-46 and 49-51. This means those lines (line 44-46 and line 49-51) can never have any affect on the expected output of the method.
+
+\bigskip
+\noindent This can be proved by adding a simple test case which creates two date objects and set their minute, hour and second to some value. No matter what value for minute, hour and second is passed with the Date object, the function will always create a Gregorian Calendar instance with values of 0 for the first date object. Similarly, it will create another Gregorian Calendar instance with values 0 for hours and seconds and 10 for minutes for the second date object.
+
+\bigskip
+
+\noindent \textbf{Example test case:} \label{isAfter:example_test_case}
+
+\begin{code}
+    @Test
+    public void testIsAfterBug() {
+    	// Both happens at the same day, but at different hours
+    	// but the implementation ignores the hours, minutes
+    	// and seconds
+    	Date d1 = new Date( 2018 , 8 , 24 , 8 , 30 , 24 );
+    	Date d2 = new Date( 2018 , 8 , 24 , 9 , 30 , 24 );
+    	
+    	// This works correctly. The assert returns true
+    	assertFalse(DateUtil.isAfter(d1, d2));
+    	// This does not work correctly. The assert returns false,
+    	// when it should be true
+    	assertTrue(DateUtil.isAfter(d2, d1));
+    }
+\end{code}
+
+\bigskip
+
+\noindent \textbf{Bug Report:}
+
+\begin{itemize}
+\item \textbf{Bug Report Title}: The \emph{isAfter} function ignores hours, minutes and seconds fields from the passed in date object.
+\item \textbf{Reported by}: Sadman Sakib Hasan
+\item \textbf{Date reported}: Saturday, March 24, 2018
+\item \textbf{Program (or component) name}: BORG Calendar version 1.8.3
+\item \textbf{Configuration(s)}:\\
+\underline{System Info}
+\begin{itemize}
+\item{Operating System: Windows 10 Pro 64-bit (10.0, Build 16299)}
+\item {Language: English (Regional Setting: English)}
+\item {System Manufacturer: Hewlett-Packard}
+\item {System Model: HP 15 TouchSmart Notebook PC}
+\item {BIOS: F.10}
+\item {Processor: AMD A6-5200 APU with Radeon(TM) HD Graphics (4 CPUs), ~2.0GHz }
+\item {Memory: 6144MB RAM}
+\item {Java Version: 1.8.0\_151-b12}
+\end{itemize}
+\item \textbf{Report type}: Coding Error
+\item \textbf{Reproducibility}: 100\%
+\item \textbf{Severity}: Medium
+\item \textbf{Problem summary}: The \emph{isAfter} method automatically sets the HOUR\_OF\_DAY, MINUTE, and SECOND values of the newly created Gregorian Calendar object from the passed in dates d1 and d2 to a constant value.
+\item \textbf{Problem description}: The \emph{isAfter} method in \emph{net.sf.borg.common.DateUtil} does not take into account the hours, minutes, and seconds of the given date objects when comparing the two dates. A newly Gregorian Calendar object is created for both argument, d1 and d2, and the hours, minutes and seconds are set to 0 for \emph{d1}'s calendar instance whereas the hours and seconds are set to 0 and minute set to 10 for \emph{d2}'s calendar instance. This causes an issue when there are comparison between two dates that are in the same day, and hours, minutes and seconds differ as shown in the example test case \ref{isAfter:example_test_case}.
+\item \textbf{Steps to Reproduce}:
+\begin{itemize}
+\item Create two date objects, d1 and d2, with the day set to the same value and hours, minutes and seconds set to different values.
+\item Compare the two dates using \emph{isAfter} function.
+\item The \emph{isAfter} function will always return false regardless of the fact if d1 is ahead on hours/minutes/seconds or vice versa.
+\end{itemize}
+\item \textbf{New or old bug}: New
+\end{itemize}
+
+
+\subsubsection{sendMsg Function}
+\begin{figure}[!htb]
+\begin{center}
+\includegraphics[width=.99\textwidth]{images/MutationTesting/sendMsgCode.png}
+\end{center}
+\caption{Code for the sendMsg method}
+\label{fig:sendMsgCode}
+\end{figure}
+
+\begin{figure}[!htb]
+\begin{center}
+\includegraphics[width=.99\textwidth]{images/MutationTesting/sendMsgMutant.png}
+\end{center}
+\caption{Mutations for the sendMsg method}
+\label{fig:sendMsgMutant}
+\end{figure}
+
+The results show that not all mutants have been killed. From Figure \ref{fig:sendMsgCode} we can see that our mutation testing results can be possibly improved if more tests on the server and socket state are created. 
+
+\clearpage
+\bigskip
+\fontsize{14}{5}\textbf{After Additional Test Cases}
+
+\begin{figure}[!htb]
+\begin{center}
+\includegraphics[width=.99\textwidth]{images/MutationTesting/sendMsgCodeAfter.png}
+\end{center}
+\caption{Updated code results for the sendMsg method}
+\label{fig:sendMsgCodeAfter}
+\end{figure}
+
+\begin{figure}[!htb]
+\begin{center}
+\includegraphics[width=.99\textwidth]{images/MutationTesting/sendMsgMutantAfter.png}
+\end{center}
+\caption{Updated mutations for the sendMsg method}
+\label{fig:sendMsgMutantAfter}
+\end{figure}
+
+\clearpage
+The test case shown below was added and improved results to what is shown in Figures \ref{fig:sendMsgCodeAfter} and \ref{fig:sendMsgMutantAfter}. This test case kills the mutant at lines 44, 48 without increasing line coverage. Thus, showing how test cases built for coverage alone are not sufficient. \\
+
+The remaining bugs all relate to the \emph{close} function of the Socket object instantiated in the \emph{sendMsg} method. When Pitclipse mutates the \emph{close} function and removes it, this action causes a timeout. Which is why the \emph{sendMsg} method is defensively programmed to ensure that the socket connection is closed after the message is sent. Due to the amount of defensive programming and case of timeouts, it is not possible to achieve 100\% only using mutation testing for the method sendMsg.
+
+\begin{lstlisting}[caption={Additional test case for sendMsg},label={list:sendMsg}]
+    @Test
+    public void checkServerAlive() {
+    String msg = null;
+    SocketServer ss;
+    String response;
+        try {
+            ss = new SocketServer(2922, this);
+            response = SocketClient.sendMsg("localhost", 2922, msg);
+            assertTrue(ss.isAlive());
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+\end{lstlisting}
 
 \newpage
 \section{JPetStore}
@@ -169,6 +813,7 @@ The following statistics were gathered from the Apache access logs. The access l
 \begin{itemize}
 \item \textbf{Test Duration}: Approximately 18 minutes
 \item \textbf{Total Number of Requests}: 4714
+\item \textbf{Request Rate}: 4.36 requests/second
 \item \textbf{Number of GET Requests}: 4399 (93\% of all requests)
 \item \textbf{Number of POST Requests}: 315 (7\% of all requests)
 \item \textbf{Success HTTP Codes}: 200 (Success) and 302 (Found)
@@ -291,6 +936,7 @@ The following statistics were gathered from the Apache access logs. The access l
 \begin{itemize}
 \item \textbf{Test Duration}: Approximately 15 minutes
 \item \textbf{Total Number of Requests}: 7500
+\item \textbf{Request Rate}: 8.33 requests/second
 \item \textbf{Number of GET Requests}: 7000 (93\% of all requests)
 \item \textbf{Number of POST Requests}: 500 (7\% of all requests)
 \item \textbf{Success HTTP Codes}: 200 (Success) and 302 (Found)
