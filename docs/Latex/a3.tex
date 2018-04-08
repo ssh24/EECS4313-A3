@@ -281,6 +281,288 @@ Following are the existing test cases from Assignment-2 and their coverage metri
 \noindent \textbf{Rationale}: The testing technique used for testing this method is \emph{Equivalence Class Testing}. It is a suitable technique for this method since the argument is an integer which is an independent variable and the input range can be partitioned assuring disjointness and non-redundancy between each partition set. We have chosen the partition integer range based on usages of minute, minutes, hour, and hours. In order to partition the integer argument into hours and minutes, we divide the minutes by 60 to get the range of hours and the remainder (minutes \% 60) to get the range of the minutes. By covering all the cases, where the given input returns a concatenation of hours and minutes string, we were able to reach a 100\% coverage for this method.
 
 \newpage
+\subsection{Slice Testing}
+
+\subsubsection{Chosen Method for Testing}
+
+\begin{itemize}
+\item \textbf{Class}: \emph{net.sf.borg.common.DateUtil.java}
+\item \textbf{Method}: \emph{minuteString(int mins)}
+\item \textbf{Method Description}:
+This method generates a human readable string for a particular number of minutes. It returns the string in terms of hours or minutes or both hours and minutes.
+\begin{itemize}
+\item \textbf{mins} - The first argument is of type integer.
+\end{itemize}
+\end{itemize}
+
+\noindent Following is the code of the \emph{minuteString} method:
+\begin{lstlisting}[numbers=left,firstnumber=100]
+  public static String minuteString(int mins) {
+    
+    int hours = mins / 60;
+    int minsPast = mins % 60;
+    
+    String minutesString;
+    String hoursString;
+    
+    if (hours > 1) {
+      hoursString = hours + " " + Resource.getResourceString("Hours");
+    } else if (hours > 0) {
+      hoursString = hours + " " + Resource.getResourceString("Hour");
+    } else {
+      hoursString = "";
+    }
+
+    if (minsPast > 1) {
+      minutesString = minsPast + " " + Resource.getResourceString("Minutes");
+    } else if (minsPast > 0) {
+      minutesString = minsPast + " " + Resource.getResourceString("Minute");
+    } else if (hours >= 1) {
+      minutesString = "";
+    } else {
+      minutesString = minsPast + " " + Resource.getResourceString("Minutes");
+    }
+
+    // space between hours and minutes
+    if (!hoursString.equals("") && !minutesString.equals(""))
+      minutesString = " " + minutesString;
+
+    return hoursString + minutesString;
+  }
+\end{lstlisting}
+
+\subsubsection{Backward Slicing}
+Backward slicing is in the form of S(v,n) where the slices are code fragments that contribute to variable v at statement n. Slices are only done for primitive values and their All-defs and P-use paths defined in the data flow analysis part.\\
+
+S(hours, 102)
+\begin{lstlisting}[numbers=left,firstnumber=100]
+  public static String minuteString(int mins) {
+    
+    int hours = mins / 60;
+\end{lstlisting}  
+
+
+S(minsPast, 103)
+\begin{lstlisting}[numbers=left,firstnumber=100]
+  public static String minuteString(int mins) {
+    
+    
+    int minsPast = mins % 60;
+\end{lstlisting} 
+The following test case covers the two slices listed above and covers the All-def, P-use for \emph{mins}.
+\begin{code}
+  assertEquals("1 Hour",DateUtil.minuteString(60));
+\end{code}
+
+\break
+S(hours, 108)
+\begin{lstlisting}[numbers=left,firstnumber=100]
+  public static String minuteString(int mins) {
+    
+    int hours = mins / 60;
+    
+    
+
+
+    
+    if (hours > 1) {
+    }
+\end{lstlisting}
+
+
+S(hours, 120)
+\begin{lstlisting}[numbers=left,firstnumber=100]
+  public static String minuteString(int mins) {
+    
+    int hours = mins / 60;
+    int minsPast = mins % 60;
+    
+    
+    
+    
+    
+     
+    
+     
+    
+     
+    
+
+    if (minsPast > 1) {
+      
+    } else if (minsPast > 0) {
+      
+    } else if (hours >= 1) {
+    }
+\end{lstlisting}
+The following test case covers the previous two slices for \emph{hours}.
+\begin{code}
+assertEquals("3 Hours",DateUtil.minuteString(180));
+\end{code}
+S(minsPast, 116)
+\begin{lstlisting}[numbers=left,firstnumber=100]
+  public static String minuteString(int mins) {
+    
+    
+    int minsPast = mins % 60;
+    
+    
+    
+    
+    
+     
+    
+     
+    
+     
+    
+
+    if (minsPast > 1) {
+      
+    }
+\end{lstlisting}
+The following test case covers the previous slice for \emph{minsPast}.
+\begin{code}
+assertEquals("1 Hour 15 Minutes",DateUtil.minuteString(75));
+\end{code}
+S(hours, 110)
+\begin{lstlisting}[numbers=left,firstnumber=100]
+  public static String minuteString(int mins) {
+    
+    int hours = mins / 60;
+    
+    
+    
+    
+    
+    if (hours > 1) {
+      
+    } else if (hours > 0) {
+    
+    }
+\end{lstlisting}
+The following test case covers the previous slice for \emph{hours}.
+\begin{code}
+assertEquals("1 Hour 1 Minute",DateUtil.minuteString(61));
+\end{code}
+
+S(minsPast, 118)
+\begin{lstlisting}[numbers=left,firstnumber=100]
+  public static String minuteString(int mins) {
+    
+    
+    int minsPast = mins % 60;
+    
+    
+    
+    
+    
+     
+    
+     
+    
+     
+    
+
+    if (minsPast > 1) {
+      
+    } else if (minsPast > 0) {
+      
+    
+    }
+\end{lstlisting}
+The following test case covers the previous slice for \emph{minsPast}.
+\begin{code}
+assertEquals("1 Hour 1 Minute",DateUtil.minuteString(61));
+\end{code}
+
+S(hours, 112)
+\begin{lstlisting}[numbers=left,firstnumber=100]
+  public static String minuteString(int mins) {
+    
+    int hours = mins / 60;
+    
+    
+    
+    
+    
+    if (hours > 1) {
+      
+    } else if (hours > 0) {
+    
+    } else {
+    
+    }
+\end{lstlisting}
+The following test case covers the previous slice for \emph{hours}.
+\begin{code}
+assertEquals("0 Minutes",DateUtil.minuteString(0)); 
+\end{code}
+
+S(hours, 122)
+\begin{lstlisting}[numbers=left,firstnumber=100]
+  public static String minuteString(int mins) {
+    
+    int hours = mins / 60;
+    int minsPast = mins % 60;
+    
+    
+    
+    
+    
+     
+    
+     
+    
+     
+    
+
+    if (minsPast > 1) {
+      
+    } else if (minsPast > 0) {
+      
+    } else if (hours >= 1) {
+    
+    } else {
+    
+    }
+\end{lstlisting}
+S(minsPast, 122)
+\begin{lstlisting}[numbers=left,firstnumber=100]
+  public static String minuteString(int mins) {
+    
+    int hours = mins / 60;
+    int minsPast = mins % 60;
+    
+    
+    
+    
+    
+     
+    
+     
+    
+     
+    
+
+    if (minsPast > 1) {
+      
+    } else if (minsPast > 0) {
+      
+    } else if (hours >= 1) {
+    
+    } else {
+    
+    }
+\end{lstlisting}
+The following test cases covers the previous two slices.
+\begin{code}
+assertEquals("0 Minutes",DateUtil.minuteString(0));
+\end{code}
+
+This concludes all the backward slices related to the All-defs and P-uses of the primitive types in the \emph{minuteString} function.
+
+\newpage
 \subsection{Mutation Testing}
 Mutation tests were run using the previous unit test suite that we created for assignment 2. The program used to run the Mutation tests was \emph{Eclipse} with the \emph{Pitclipse} plugin. The three methods that we tested are listed with their results in the following subsections. 
 
